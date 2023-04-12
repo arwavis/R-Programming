@@ -84,3 +84,58 @@ stats[stats$Income.Group == "High income" & stats$Internet.users > 95,]
 levels(stats$Income.Group)
 
 stats[stats$Country.Name == "Malta",]
+
+#------------------------------------------ Qplot Visualization
+library(ggplot2)
+?qplot
+qplot(data = stats, x=Internet.users)
+qplot(data = stats, x=Income.Group, y=Birth.rate)
+qplot(data = stats, x=Income.Group, y=Birth.rate, size =I(3))
+qplot(data = stats, x=Income.Group, y=Birth.rate, size =I(3) , color =I("red"))
+qplot(data = stats, x=Income.Group, y=Birth.rate,geom = "boxplot")
+
+#------------------------------------------ Visualizing what is required.
+qplot(data = stats,x =Internet.users, y=Birth.rate)
+qplot(data = stats,x =Internet.users, y=Birth.rate,
+     color = I("red"),size = I(4))
+qplot(data = stats,x =Internet.users, y=Birth.rate,
+      color = Income.Group ,size = I(5))
+      
+#------------------------------------------ Creating Dataframe.
+# This is the easiest way to create a new DataFrame from Vector.
+mydf <- data.frame(Countries_2012_Dataset, Codes_2012_Dataset, Regions_2012_Dataset)
+head(mydf)
+# Helps change/Re-define column Name
+colnames(mydf) <- c("Country" , "Code", "Region")
+head(mydf)
+summary(mydf)
+
+# Second way of create Dataframe combining the change of column names.
+#mydf <- data.frame(Country=Countries_2012_Dataset, Code=Codes_2012_Dataset, Region=Regions_2012_Dataset)
+#head(mydf)
+
+#------------------------------------------ Merging Dataframe.
+head(stats)
+head(mydf)      
+
+merged <- merge(stats, mydf, by.x ="Country.Code", by.y = "Code")
+head(merged)
+# To remove duplicate Coumtry column
+merged$Country <- NULL
+str(merged)
+head(merged)
+
+#------------------------------------------  Visualizing the Merged Data
+
+qplot(data = merged,x =Internet.users, y=Birth.rate,
+      color = Region ,size = I(5))
+# change shapes
+qplot(data = merged,x =Internet.users, y=Birth.rate,
+      color = Region ,size = I(5), shape = I(17))
+# Transparency 
+qplot(data = merged,x =Internet.users, y=Birth.rate,
+      color = Region ,size = I(5), shape = I(19), alpha = I(0.6))
+
+# Title
+qplot(data = merged,x =Internet.users, y=Birth.rate,
+      color = Region ,size = I(5), shape = I(19), alpha = I(0.6), main="Birth Rate Vs Internet Users")
